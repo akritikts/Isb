@@ -24,28 +24,26 @@ public class Head extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         chatHead = new ImageView(this);
         chatHead.setImageResource(R.mipmap.ic_launcher);
-        image = new ImageView(this);
+        /*image = new ImageView(this);
         image.setImageResource(R.drawable.cls);
-        image.setVisibility(View.GONE);
+        image.setVisibility(View.GONE);*/
 
-       final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.END;
-        chatHead.setLayoutParams(layoutParams);
 
-        /*params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
+
+        params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
-*/
-        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-        /*layoutParams.x = 0;
-        layoutParams.y = 100;*/
+
+        params.gravity = Gravity.TOP | Gravity.LEFT;
+        params.x = 0;
+        params.y = 100;
 
         //this code is for dragging the chat head
         chatHead.setOnTouchListener(new View.OnTouchListener() {
-            private int initialX, close_x, close_y;
+            private int initialX;
             private int initialY;
             private float initialTouchX;
             private float initialTouchY;
@@ -54,28 +52,32 @@ public class Head extends Service {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        //initialX = params.x;
-                        //initialY = params.y;
+                        initialX = params.x;
+                        initialY = params.y;
                         initialTouchX = event.getRawX();
                         initialTouchY = event.getRawY();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        image.setVisibility(View.GONE);
+
                         return true;
                     case MotionEvent.ACTION_MOVE:
-                        image.setVisibility(View.VISIBLE);
                         params.x = initialX
                                 + (int) (event.getRawX() - initialTouchX);
                         params.y = initialY
                                 + (int) (event.getRawY() - initialTouchY);
-                        windowManager.updateViewLayout(chatHead, layoutParams);
+                        if (params.y<=40){
+
+                        }
+                            //stopService()
+                        else
+                        windowManager.updateViewLayout(chatHead, params);
                         return true;
                 }
                 return false;
             }
         });
-        windowManager.addView(chatHead, layoutParams);
-        windowManager.addView(image, layoutParams);
+        windowManager.addView(chatHead, params);
+       // windowManager.addView(image, layoutParams);
     }
 
     @Override
